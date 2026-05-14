@@ -1,0 +1,34 @@
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Dashboard Veiculos Cadastrados</title>
+
+        <!-- Bootstrap = biblioteca pronta de estilos -->
+
+        <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/flatly/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h1 class="mb-4"> Veículos Cadastrados </h1>
+            <button class="btn btn-primary mb-3" onclick="carregarVeiculos()"> Atualizar </button>
+
+            <table class="table table-hover tabela-veiculos">
+                <thead>
+                    <th>Título</th>
+                    <th>Responsável</th>
+                    <th>Carro</th>
+                    <th>Placa</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                    <th>Data Inclusão</th>
+                </thead>
+                <tbody id="tabela-veiculos">
+
+                </tbody>
+            </table>
+        </div>
+        <script src="app.js"></script>    
+    </body>
+</html>
