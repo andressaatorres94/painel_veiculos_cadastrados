@@ -37,6 +37,19 @@ async function carregarVeiculos(){
                             ${veiculo.placa}
                         </td>
 
+                        <td>
+                            ${veiculo.tipo}
+                        </td>
+
+                        <td>
+                            ${veiculo.status}
+                        </td>
+
+                        <td>
+                            ${veiculo.dataInclusao}
+                        </td>
+
+
                     </tr>
                 `;
             }

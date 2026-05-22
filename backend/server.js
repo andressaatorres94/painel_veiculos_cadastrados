@@ -11,7 +11,10 @@ app.get('/veiculos', (req, res)=> {
         titulo: '1001',
         responsavel: 'João',
         carro: 'Corolla',
-        placa:'ABC1234'
+        placa:'ABC1234',
+        tipo: 'Carro',
+        status: 'Ativo',
+        dataInclusao: '01-01-2026'
     
     }];
     
