@@ -1,7 +1,17 @@
 {
+  "name": "veiculos-dash",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "demo": "node server.js --demo"
+  },
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
-    "mssql": "^12.5.3"
+    "msnodesqlv8": "^5.2.0",
+    "mssql": "^12.5.4",
+    "odbc": "^2.5.0"
   }
 }

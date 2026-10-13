@@ -1,0 +1,8 @@
+node_modules/
+.env
+
+# Arquivos locais com informações do ambiente/banco (não versionar)
+backend/teste.js
+backend/inspecionar-view.js
+LEIA ME.txt
+.claude/
