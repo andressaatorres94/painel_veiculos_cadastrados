@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veículos Cadastrados</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+    <!-- ===== Menu lateral ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-marca">
+            <i class="bi bi-car-front-fill"></i>
+            <span>Veículos</span>
+        </div>
+        <nav class="sidebar-menu">
+            <div class="menu-grupo">Cadastro</div>
+            <a href="#/veiculos" class="menu-item" data-view="veiculos"><i class="bi bi-speedometer2"></i><span>Painel</span></a>
+            <a href="#/graficos" class="menu-item" data-view="graficos"><i class="bi bi-bar-chart-line"></i><span>Gráficos</span></a>
+            <div class="menu-grupo">Relatórios</div>
+            <a href="#" class="menu-item" id="menu-relatorio"><i class="bi bi-file-earmark-excel"></i><span>Exportar Excel</span></a>
+        </nav>
+        <button class="sidebar-recolher" id="btn-recolher" title="Recolher menu"><i class="bi bi-chevron-double-left"></i><span>Recolher menu</span></button>
+    </aside>
+
+    <div class="conteudo">
+
+        <!-- ===== Barra superior ===== -->
+        <header class="topbar">
+            <button class="btn btn-link text-secondary d-lg-none p-0 me-2" id="btn-menu-mobile" aria-label="Abrir menu"><i class="bi bi-list fs-4"></i></button>
+            <nav class="breadcrumb-app">
+                <i class="bi bi-house-door"></i> Home <span>/</span>
+                <i class="bi bi-car-front"></i> Veículos <span>/</span>
+                <strong id="breadcrumb-atual">Painel</strong>
+            </nav>
+            <div class="topbar-acoes">
+                <span class="badge text-bg-warning d-none" id="badge-demo" title="Dados fictícios para testes">MODO DEMONSTRAÇÃO</span>
+                <span class="ultima-atualizacao" id="ultima-atualizacao"></span>
+                <button class="btn btn-sm btn-outline-secondary" id="btn-atualizar"><i class="bi bi-arrow-clockwise"></i> <span class="d-none d-md-inline">Atualizar</span></button>
+                <button class="btn btn-sm btn-success" id="btn-relatorio"><i class="bi bi-file-earmark-excel"></i> <span class="d-none d-md-inline">Exportar Excel</span></button>
+            </div>
+        </header>
+
+        <main class="pagina">
+
+            <div class="alert alert-danger d-none" id="alerta-erro" role="alert"></div>
+
+            <!-- ===== Filtros (compartilhados pelo painel e pelos gráficos) ===== -->
+            <section class="painel-card filtros">
+                <div class="filtros-linha">
+                    <div class="filtro">
+                        <label for="f-categoria">Categoria</label>
+                        <select id="f-categoria" class="form-select form-select-sm"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filtro">
+                        <label for="f-tipo-titulo">Tipo de título</label>
+                        <select id="f-tipo-titulo" class="form-select form-select-sm"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filtro">
+                        <label for="f-titulo">Título</label>
+                        <input id="f-titulo" class="form-control form-control-sm" placeholder="Ex.: A28223">
+                    </div>
+                    <div class="filtro">
+                        <label for="f-carro">Veículo</label>
+                        <input id="f-carro" class="form-control form-control-sm" placeholder="Ex.: Onix">
+                    </div>
+                    <div class="filtro">
+                        <label for="f-tipo">Tipo</label>
+                        <select id="f-tipo" class="form-select form-select-sm"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filtro">
+                        <label for="f-status">Status</label>
+                        <select id="f-status" class="form-select form-select-sm"><option value="">Todos</option></select>
+                    </div>
+                    <div class="filtro">
+                        <label for="f-de">Inclusão de</label>
+                        <input id="f-de" type="date" class="form-control form-control-sm">
+                    </div>
+                    <div class="filtro">
+                        <label for="f-ate">até</label>
+                        <input id="f-ate" type="date" class="form-control form-control-sm">
+                    </div>
+                    <div class="filtro filtro-busca">
+                        <label for="f-busca">Pesquisar</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input id="f-busca" class="form-control" placeholder="Placa, responsável, título...">
+                        </div>
+                    </div>
+                    <div class="filtro filtro-botao">
+                        <button class="btn btn-sm btn-outline-secondary" id="btn-limpar"><i class="bi bi-x-circle"></i> Limpar</button>
+                    </div>
+                </div>
+                <div class="periodos">
+                    <span>Período rápido:</span>
+                    <button class="btn-chip" data-periodo="0">Hoje</button>
+                    <button class="btn-chip" data-periodo="7">7 dias</button>
+                    <button class="btn-chip" data-periodo="30">30 dias</button>
+                    <button class="btn-chip" data-periodo="90">90 dias</button>
+                    <button class="btn-chip" data-periodo="365">12 meses</button>
+                </div>
+            </section>
+
+            <!-- ===== VIEW: Painel ===== -->
+            <div id="view-veiculos" class="view">
+
+                <!-- Cards por título (clique filtra) -->
+                <section class="painel-card">
+                    <div class="secao-titulo">
+                        <h2>Cadastros por categoria e tipo de título</h2>
+                        <small class="text-secondary">Clique para filtrar</small>
+                    </div>
+                    <div class="categorias" id="categorias"></div>
+                    <div class="cards-titulo" id="cards-titulo"></div>
+                </section>
+
+                <!-- Indicadores -->
+                <section class="indicadores" id="indicadores">
+                    <div class="indicador"><i class="bi bi-collection"></i><div><strong data-kpi="total">–</strong><span>Total filtrado</span></div></div>
+                    <div class="indicador"><i class="bi bi-calendar-check"></i><div><strong data-kpi="hoje">–</strong><span>Incluídos hoje</span></div></div>
+                    <div class="indicador"><i class="bi bi-calendar-week"></i><div><strong data-kpi="semana">–</strong><span>Últimos 7 dias</span></div></div>
+                    <div class="indicador"><i class="bi bi-calendar3"></i><div><strong data-kpi="mes">–</strong><span>Últimos 30 dias</span></div></div>
+                    <div class="indicador"><i class="bi bi-shield-check"></i><div><strong data-kpi="isentos">–</strong><span>Isentos</span></div></div>
+                </section>
+
+                <!-- Tabela -->
+                <section class="painel-card p-0">
+                    <div class="table-responsive">
+                        <table class="table tabela-veiculos mb-0">
+                            <thead>
+                                <tr>
+                                    <th data-ordenar="titulo">Título</th>
+                                    <th data-ordenar="tipotitulo">Tipo de Título</th>
+                                    <th data-ordenar="responsavel">Responsável</th>
+                                    <th data-ordenar="carro">Carro</th>
+                                    <th data-ordenar="placa">Placa</th>
+                                    <th data-ordenar="codacesso">Código de Acesso</th>
+                                    <th data-ordenar="tipo">Tipo</th>
+                                    <th data-ordenar="status">Status</th>
+                                    <th data-ordenar="data">Data Inclusão</th>
+                                    <th data-ordenar="isento">Isenção</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-veiculos"></tbody>
+                        </table>
+                    </div>
+                    <div class="tabela-rodape">
+                        <div class="d-flex align-items-center gap-2">
+                            <select id="tamanho-pagina" class="form-select form-select-sm w-auto">
+                                <option>15</option><option>25</option><option>50</option><option>100</option>
+                            </select>
+                            <span class="text-secondary">linhas / página</span>
+                        </div>
+                        <span class="text-secondary" id="info-paginacao"></span>
+                        <nav><ul class="pagination pagination-sm mb-0" id="paginacao"></ul></nav>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ===== VIEW: Gráficos ===== -->
+            <div id="view-graficos" class="view d-none">
+                <section class="painel-card">
+                    <div class="grafico-controles">
+                        <div>
+                            <label>Agrupar por</label>
+                            <div class="btn-group btn-group-sm" role="group" id="g-agrupar">
+                                <button class="btn btn-outline-primary active" data-por="tipoTitulo"><i class="bi bi-tags"></i> Tipo de título</button>
+                                <button class="btn btn-outline-primary" data-por="categoria"><i class="bi bi-people"></i> Categoria</button>
+                                <button class="btn btn-outline-primary" data-por="titulo"><i class="bi bi-tag"></i> Título</button>
+                                <button class="btn btn-outline-primary" data-por="data"><i class="bi bi-calendar-event"></i> Data de inclusão</button>
+                                <button class="btn btn-outline-primary" data-por="carro"><i class="bi bi-car-front"></i> Veículo</button>
+                                <button class="btn btn-outline-primary" data-por="tipo"><i class="bi bi-diagram-2"></i> Tipo</button>
+                                <button class="btn btn-outline-primary" data-por="status"><i class="bi bi-check2-circle"></i> Status</button>
+                            </div>
+                        </div>
+                        <div id="g-granularidade-box" class="d-none">
+                            <label>Período</label>
+                            <div class="btn-group btn-group-sm" role="group" id="g-granularidade">
+                                <button class="btn btn-outline-secondary" data-gran="dia">Dia</button>
+                                <button class="btn btn-outline-secondary active" data-gran="mes">Mês</button>
+                                <button class="btn btn-outline-secondary" data-gran="ano">Ano</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Tipo de gráfico</label>
+                            <div class="btn-group btn-group-sm" role="group" id="g-tipo"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="grafico-grade">
+                    <section class="painel-card">
+                        <div class="secao-titulo">
+                            <h2 id="g-titulo">Veículos cadastrados por tipo de título</h2>
+                            <small class="text-secondary" id="g-subtitulo"></small>
+                        </div>
+                        <div class="grafico-area">
+                            <canvas id="grafico" role="img" aria-label="Gráfico de veículos cadastrados"></canvas>
+                            <div class="grafico-vazio d-none" id="grafico-vazio"><i class="bi bi-inbox"></i><span>Nenhum veículo para os filtros selecionados</span></div>
+                        </div>
+                    </section>
+                    <section class="painel-card p-0">
+                        <div class="secao-titulo px-3 pt-3"><h2>Dados do gráfico</h2></div>
+                        <div class="tabela-grafico-wrap">
+                            <table class="table table-sm mb-0 tabela-grafico">
+                                <thead><tr><th id="g-coluna">Tipo de título</th><th class="text-end">Qtd.</th><th class="text-end">%</th></tr></thead>
+                                <tbody id="g-tabela"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast align-items-center text-bg-dark border-0" role="status" aria-live="polite">
+        <div class="d-flex"><div class="toast-body" id="toast-texto"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
